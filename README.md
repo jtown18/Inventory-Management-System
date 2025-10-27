@@ -12,6 +12,6 @@ Inventory management system &amp; POS
 5. POS as local, MongoDB as atlas, IMS as local and hosted (AWS)
 
 # Techstack
-Frontend: Vite Typescript
-Backend: NestJS
-Database: MongoDB
+Frontend: Vite Typescript <br />
+Backend: NestJS <br />
+Database: MongoDB <br />
