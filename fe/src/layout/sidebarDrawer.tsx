@@ -47,26 +47,20 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
         darkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
       )}
     >
-      <div className="flex-1 overflow-y-auto overflow-x-hidden pr-2">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
         {/* Header with Logo */}
         <div
           className={cn(
-            "flex items-center p-0 mt-1 mb-1",
-            isOpen ? "ml-4 justify-center" : "justify-center"
+            "flex items-center mt-1 mb-1",
+            isOpen ? "ml-4 justify-start" : "justify-center"
           )}
         >
-<<<<<<< Updated upstream
           <img
             src={darkMode ? logoImageWhite : logoImage}
-=======
-          <Box
-            component="img"
-            src={theme.palette.mode === "dark" ? logoImageWhite : logoImage}
->>>>>>> Stashed changes
             alt="Logo"
             className={cn(
               "object-contain",
-              isOpen ? "w-8 h-8 mr-2" : "w-6 h-6"
+              isOpen ? "w-8 h-8 mr-2" : "w-8 h-8"
             )}
           />
           {isOpen && (
@@ -82,7 +76,7 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
         </div>
 
         {/* Navigation Menu */}
-        <nav className="space-y-1">
+        <nav className="space-y-1 px-2">
           <TooltipProvider>
             {menuItems.map((item) => (
               <div key={item.label}>
@@ -93,7 +87,10 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                         variant="ghost"
                         onClick={() => toggleSubmenu(item.label)}
                         className={cn(
-                          "w-full justify-start h-auto py-2 px-3 my-1 mx-1 rounded-md",
+                          "w-full h-auto py-2 rounded-md transition-colors",
+                          isOpen
+                            ? "justify-start px-3"
+                            : "justify-center px-0 aspect-square h-10 w-10 mx-auto",
                           darkMode
                             ? "text-gray-200 hover:bg-gray-800 hover:text-white"
                             : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -103,7 +100,8 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                           <TooltipTrigger asChild>
                             <div
                               className={cn(
-                                "flex items-center min-w-[40px]",
+                                "flex items-center",
+                                isOpen ? "min-w-[40px]" : "justify-center",
                                 darkMode ? "text-gray-300" : "text-gray-600"
                               )}
                             >
@@ -177,7 +175,10 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                     to={item.path || ""}
                     className={({ isActive }) =>
                       cn(
-                        "flex items-center py-2 px-3 my-1 mx-1 rounded-md transition-colors",
+                        "flex items-center py-2 rounded-md transition-colors",
+                        isOpen
+                          ? "justify-start px-3"
+                          : "justify-center px-0 aspect-square h-10 w-10 mx-auto",
                         darkMode
                           ? "text-gray-200 hover:bg-gray-800 hover:text-white"
                           : "text-gray-700 hover:bg-gray-100 hover:text-gray-900",
@@ -192,7 +193,8 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
                       <TooltipTrigger asChild>
                         <div
                           className={cn(
-                            "flex items-center min-w-[40px]",
+                            "flex items-center",
+                            isOpen ? "min-w-[40px]" : "justify-center",
                             darkMode ? "text-gray-300" : "text-gray-600"
                           )}
                         >
@@ -229,7 +231,10 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
               variant="ghost"
               onClick={toggleDrawer}
               className={cn(
-                "w-full justify-center py-2 px-3 rounded-md transition-colors",
+                "w-full py-2 rounded-md transition-colors",
+                isOpen
+                  ? "justify-center px-3"
+                  : "justify-center px-0 aspect-square h-10 w-10 mx-auto",
                 darkMode
                   ? "text-gray-300 hover:bg-gray-800 hover:text-white"
                   : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
