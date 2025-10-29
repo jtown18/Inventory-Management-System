@@ -55,8 +55,14 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
             isOpen ? "ml-4 justify-center" : "justify-center"
           )}
         >
+<<<<<<< Updated upstream
           <img
             src={darkMode ? logoImageWhite : logoImage}
+=======
+          <Box
+            component="img"
+            src={theme.palette.mode === "dark" ? logoImageWhite : logoImage}
+>>>>>>> Stashed changes
             alt="Logo"
             className={cn(
               "object-contain",
