@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./layout/layout";
+import DashboardPage from "./pages/dashboard";
+import InventoryPage from "./pages/inventory";
 
 const App = () => {
   return (
@@ -7,10 +9,10 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* All these routes will render inside the Layout's Outlet */}
-          <Route index element={<h1>Dashboard Home</h1>} />
+          <Route index element={<DashboardPage />} />
 
           <Route path="inventory">
-            <Route index element={<h1>Inventory List</h1>} />
+            <Route index element={<InventoryPage />} />
             <Route path=":id" element={<h1>Inventory Item Details</h1>} />
           </Route>
 
