@@ -1,26 +1,26 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
   Tooltip,
-  IconButton,
-  Collapse,
-  Box,
-  Typography,
-  Divider,
-} from "@mui/material";
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
   ChevronRight,
-  ExpandLess,
-  ExpandMore,
-} from "@mui/icons-material";
-import { NavLink } from "react-router-dom";
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import menuItems from "./menuItems";
-import { useTheme } from "@mui/material/styles";
 import logoImage from "../public/logo.png";
 import logoImageWhite from "../public/logo-white.png";
 
@@ -29,6 +29,7 @@ interface SidebarDrawerProps {
   submenuOpen: Record<string, boolean>;
   toggleSubmenu: (label: string) => void;
   toggleDrawer: () => void;
+  darkMode: boolean;
 }
 
 const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
@@ -36,174 +37,211 @@ const SidebarDrawer: React.FC<SidebarDrawerProps> = ({
   submenuOpen,
   toggleSubmenu,
   toggleDrawer,
+  darkMode,
 }) => {
-  const theme = useTheme();
-
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: isOpen ? 200 : 60,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
-          width: isOpen ? 200 : 60,
-          transition: "width 0.3s",
-          overflowX: "hidden",
-          bgcolor: theme.palette.background.paper,
-          color: theme.palette.text.primary,
-        },
-      }}
+    <div
+      className={cn(
+        "flex flex-col h-screen border-r transition-all duration-300 overflow-hidden",
+        isOpen ? "w-[200px]" : "w-[60px]",
+        darkMode ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
+      )}
     >
-      <Box
-        sx={{
-          flexGrow: 1,
-          overflowY: "auto",
-          overflowX: "hidden",
-          width: "100%",
-          pr: 2,
-        }}
-      >
-        <Box
-          sx={{
-            p: 0,
-            display: "flex",
-            ml: isOpen ? 4 : 0,
-            mt: 1,
-            mb: 1,
-            alignItems: "center",
-            justifyContent: isOpen ? "center" : "flex-start",
-          }}
-        >
-          <Box
-            component="img"
-            src={theme.palette.mode === "dark" ? logoImageWhite : logoImage}
-            alt="Logo"
-            sx={{ width: isOpen ? 32 : 25, height: isOpen ? 32 : 25 }}
-            ml={isOpen ? 0 : 1.5}
-            mr={isOpen ? 1 : 0}
-          />
-          {isOpen ? (
-            <>
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: 700, whiteSpace: "nowrap" }}
-              >
-                IMS
-              </Typography>
-            </>
-          ) : (
-            ""
+      <div className="flex-1 overflow-y-auto overflow-x-hidden pr-2">
+        {/* Header with Logo */}
+        <div
+          className={cn(
+            "flex items-center p-0 mt-1 mb-1",
+            isOpen ? "ml-4 justify-center" : "justify-center"
           )}
-          <Box
-            sx={{
-              py: 1,
-              pl: isOpen ? 1 : 0,
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <IconButton
-              onClick={toggleDrawer}
-              sx={{
-                "&:hover": { backgroundColor: "transparent", color: "inherit" },
-                pl: isOpen ? 1 : 0,
-              }}
-              size="small"
-            >
-              {isOpen ? <ChevronLeft /> : <ChevronRight />}
-            </IconButton>
-          </Box>
-        </Box>
-        <List>
-          {menuItems.map((item) => (
-            <React.Fragment key={item.label}>
-              <ListItem
-                component={item.path ? NavLink : "div"}
-                to={item.path || ""}
-                sx={{
-                  "&.active": {
-                    bgcolor:
-                      theme.palette.mode === "dark" ? "#2c2c3e" : "#d0e1ff",
-                    color: theme.palette.mode === "dark" ? "white" : "black",
-                  },
-                  my: 0.5,
-                  mx: 1,
-                  px: 1,
-                  borderRadius: 1,
-                }}
-              >
-                <Tooltip
-                  title={!isOpen ? item.label : ""}
-                  placement="right"
-                  arrow
-                  disableHoverListener={isOpen}
-                >
-                  <ListItemIcon sx={{ color: "inherit", minWidth: 40 }}>
-                    {item.icon}
-                  </ListItemIcon>
-                </Tooltip>
-                {isOpen && (
-                  <ListItemText
-                    primary={item.label}
-                    sx={{ "& span": { fontSize: "0.85rem" } }}
-                  />
-                )}
-                {item.children && (
-                  <IconButton
-                    edge="end"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      toggleSubmenu(item.label);
-                    }}
-                    sx={{ color: "inherit" }}
-                  >
-                    {submenuOpen[item.label] ? <ExpandLess /> : <ExpandMore />}
-                  </IconButton>
-                )}
-              </ListItem>
-
-              {item.children && (
-                <Collapse
-                  in={submenuOpen[item.label]}
-                  timeout="auto"
-                  unmountOnExit
-                >
-                  <List component="div" disablePadding>
-                    {item.children.map((child) => (
-                      <ListItem
-                        key={child.label}
-                        component={NavLink}
-                        to={child.path || ""}
-                        sx={{
-                          pl: 6,
-                          mx: 1,
-                          my: 0.5,
-                          borderRadius: 1,
-                          "&.active": {
-                            bgcolor:
-                              theme.palette.mode === "dark"
-                                ? "#3c3c4e"
-                                : "#e6f0ff",
-                          },
-                        }}
-                      >
-                        <ListItemIcon sx={{ color: "inherit", minWidth: 40 }}>
-                          {child.icon}
-                        </ListItemIcon>
-                        <ListItemText primary={child.label} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Collapse>
+        >
+          <img
+            src={darkMode ? logoImageWhite : logoImage}
+            alt="Logo"
+            className={cn(
+              "object-contain",
+              isOpen ? "w-8 h-8 mr-2" : "w-6 h-6"
+            )}
+          />
+          {isOpen && (
+            <h1
+              className={cn(
+                "text-lg font-bold whitespace-nowrap",
+                darkMode ? "text-white" : "text-gray-900"
               )}
-            </React.Fragment>
-          ))}
-        </List>
-      </Box>
+            >
+              IMS
+            </h1>
+          )}
+        </div>
 
-      <Divider />
-    </Drawer>
+        {/* Navigation Menu */}
+        <nav className="space-y-1">
+          <TooltipProvider>
+            {menuItems.map((item) => (
+              <div key={item.label}>
+                {item.children ? (
+                  <Collapsible open={submenuOpen[item.label]}>
+                    <CollapsibleTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        onClick={() => toggleSubmenu(item.label)}
+                        className={cn(
+                          "w-full justify-start h-auto py-2 px-3 my-1 mx-1 rounded-md",
+                          darkMode
+                            ? "text-gray-200 hover:bg-gray-800 hover:text-white"
+                            : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        )}
+                      >
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div
+                              className={cn(
+                                "flex items-center min-w-[40px]",
+                                darkMode ? "text-gray-300" : "text-gray-600"
+                              )}
+                            >
+                              {item.icon}
+                            </div>
+                          </TooltipTrigger>
+                          {!isOpen && (
+                            <TooltipContent side="right">
+                              <p>{item.label}</p>
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
+                        {isOpen && (
+                          <>
+                            <span className="text-sm flex-1 text-left">
+                              {item.label}
+                            </span>
+                            <div
+                              className={cn(
+                                "ml-auto",
+                                darkMode ? "text-gray-300" : "text-gray-600"
+                              )}
+                            >
+                              {submenuOpen[item.label] ? (
+                                <ChevronUp className="h-4 w-4" />
+                              ) : (
+                                <ChevronDown className="h-4 w-4" />
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </Button>
+                    </CollapsibleTrigger>
+                    {isOpen && (
+                      <CollapsibleContent>
+                        <div className="space-y-1">
+                          {item.children.map((child) => (
+                            <NavLink
+                              key={child.label}
+                              to={child.path || ""}
+                              className={({ isActive }) =>
+                                cn(
+                                  "flex items-center py-2 pl-6 mx-1 my-1 rounded-md text-sm transition-colors",
+                                  darkMode
+                                    ? "text-gray-300 hover:bg-gray-800 hover:text-white"
+                                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+                                  isActive &&
+                                    (darkMode
+                                      ? "bg-gray-800 text-white"
+                                      : "bg-gray-100 text-gray-900")
+                                )
+                              }
+                            >
+                              <div
+                                className={cn(
+                                  "flex items-center min-w-[40px]",
+                                  darkMode ? "text-gray-300" : "text-gray-600"
+                                )}
+                              >
+                                {child.icon}
+                              </div>
+                              <span>{child.label}</span>
+                            </NavLink>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    )}
+                  </Collapsible>
+                ) : (
+                  <NavLink
+                    to={item.path || ""}
+                    className={({ isActive }) =>
+                      cn(
+                        "flex items-center py-2 px-3 my-1 mx-1 rounded-md transition-colors",
+                        darkMode
+                          ? "text-gray-200 hover:bg-gray-800 hover:text-white"
+                          : "text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+                        isActive &&
+                          (darkMode
+                            ? "bg-gray-800 text-white"
+                            : "bg-gray-100 text-gray-900")
+                      )
+                    }
+                  >
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div
+                          className={cn(
+                            "flex items-center min-w-[40px]",
+                            darkMode ? "text-gray-300" : "text-gray-600"
+                          )}
+                        >
+                          {item.icon}
+                        </div>
+                      </TooltipTrigger>
+                      {!isOpen && (
+                        <TooltipContent side="right">
+                          <p>{item.label}</p>
+                        </TooltipContent>
+                      )}
+                    </Tooltip>
+                    {isOpen && <span className="text-sm">{item.label}</span>}
+                  </NavLink>
+                )}
+              </div>
+            ))}
+          </TooltipProvider>
+        </nav>
+      </div>
+
+      <Separator
+        className={cn(
+          "border",
+          darkMode ? "border-gray-700" : "border-gray-200"
+        )}
+      />
+
+      {/* Collapse/Expand Button at Bottom */}
+      <div className="p-2">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              onClick={toggleDrawer}
+              className={cn(
+                "w-full justify-center py-2 px-3 rounded-md transition-colors",
+                darkMode
+                  ? "text-gray-300 hover:bg-gray-800 hover:text-white"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              )}
+            >
+              {isOpen ? (
+                <ChevronLeft className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side={isOpen ? "bottom" : "right"}>
+            <p>{isOpen ? "Collapse Sidebar" : "Expand Sidebar"}</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
+    </div>
   );
 };
 
