@@ -5,6 +5,7 @@ import InventoryPage from "./pages/inventory";
 
 const App = () => {
   //Define application rules and logic routes
+  //lance sumalinog
   return (
     <Router>
       <Routes>
