@@ -4,6 +4,7 @@ import DashboardPage from "./pages/dashboard";
 import InventoryPage from "./pages/inventory";
 
 const App = () => {
+  //Define application rules and logic routes
   return (
     <Router>
       <Routes>
