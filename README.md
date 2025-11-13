@@ -9,7 +9,7 @@ Inventory management system &amp; POS
 2. Easy inventory handling (CRUD)
 3. Sales transactions, receipts, etc.
 4. Point of sale (POS) using barcode readers
-5. POS as local, MongoDB as atlas, IMS as local and hosted (AWS)
+5. POS as local, MongoDB as atlas, IMS as local and hosted (vercel)
 
 # Techstack
 Frontend: Vite Typescript <br />
